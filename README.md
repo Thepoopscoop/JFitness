@@ -1,4 +1,4 @@
-# Iron Log
+# GRIT
 
 A personal, offline-first workout PWA. No accounts, no subscriptions, no backend —
 everything (your plan, history, and progress photos) lives in your phone's local storage.
