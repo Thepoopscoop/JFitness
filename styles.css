@@ -95,6 +95,20 @@ button:disabled { background: var(--elevated); color: var(--text-muted); }
 
 .set-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
 .exercise-name { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+
+.icon-frame {
+  width: 100%;
+  max-width: 220px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--elevated);
+  aspect-ratio: 260/458;
+  display: none;
+}
+.icon-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.icon-frame.has-icon { display: block; }
 .exercise-target { font-size: 14px; color: var(--text-dim); margin-bottom: 36px; }
 
 .rep-counter { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 36px; }

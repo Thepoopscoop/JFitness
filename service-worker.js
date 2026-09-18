@@ -1,5 +1,5 @@
-const CACHE = 'grit-v2';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.json', './icons/icon.svg'];
+const CACHE = 'grit-v3';
+const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.json', './icons/exercises/pull-ups.png', './icons/exercises/goblet-squats.png', './icons/exercises/push-ups.png', './icons/exercises/one-arm-dumbbell-rows.png', './icons/exercises/romanian-deadlifts.png', './icons/exercises/hanging-knee-raises.png', './icons/exercises/bulgarian-split-squats.png', './icons/exercises/standing-overhead-press.png', './icons/exercises/bent-over-rows.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

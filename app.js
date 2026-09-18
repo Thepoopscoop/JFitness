@@ -109,6 +109,25 @@ async function refreshHome() {
 
 // (placeholder icon removed — minimal text-first workout screen)
 
+const EXERCISE_ICONS = {
+  'pullup': 'pull-ups.png',
+  'gobletsquat': 'goblet-squats.png',
+  'pushup': 'push-ups.png',
+  'onearmdumbbellrow': 'one-arm-dumbbell-rows.png',
+  'romaniandeadlift': 'romanian-deadlifts.png',
+  'hangingkneeraise': 'hanging-knee-raises.png',
+  'bulgariansplitsquat': 'bulgarian-split-squats.png',
+  'standingdboverheadpress': 'standing-overhead-press.png',
+  'standingdumbbelloverheadpress': 'standing-overhead-press.png',
+  'bentoverrow': 'bent-over-rows.png',
+};
+function normalizeName(name) {
+  return String(name).toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+function iconForExercise(name) {
+  return EXERCISE_ICONS[normalizeName(name)] || null;
+}
+
 // parse a leading integer target out of a reps string like "8-12", "10/side", "6"
 function parseTargetReps(repsStr) {
   const match = String(repsStr).match(/\d+/);
@@ -126,6 +145,14 @@ function showExercise() {
   setState.loggedSets = [];
 
   $('exName').textContent = ex.name;
+  const iconFile = iconForExercise(ex.name);
+  const iconFrame = $('exerciseIcon').parentElement;
+  if (iconFile) {
+    $('exerciseIcon').src = `icons/exercises/${iconFile}`;
+    iconFrame.classList.add('has-icon');
+  } else {
+    iconFrame.classList.remove('has-icon');
+  }
   $('exTarget').textContent = `Target: ${ex.reps} reps${ex.weight && ex.weight !== 'bodyweight' ? ' · ' + ex.weight : ''}`;
   $('weightRow').textContent = ex.weight && ex.weight !== 'bodyweight' ? ex.weight : 'Bodyweight';
   $('setLabel').textContent = `Set ${setState.setNum} of ${setState.totalSets}`;
