@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Iron Log</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#15171C">
+<link rel="icon" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HOME -->
+<section id="home" class="screen active">
+  <div class="top-row">
+    <h1>Iron Log</h1>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><div class="num" id="streakNum">0</div><div class="label">day streak</div></div>
+    <div class="stat"><div class="num" id="sinceNum">—</div><div class="label">days since last workout</div></div>
+  </div>
+
+  <div class="panel" id="noPlanPanel" style="display:none">
+    <h2>No plan loaded</h2>
+    <p class="hint">Upload the plan JSON your coach (Claude/ChatGPT) generated for you.</p>
+    <input type="file" id="planFile" accept="application/json">
+  </div>
+
+  <div class="panel" id="planPanel" style="display:none">
+    <h2 id="planTitle">Plan</h2>
+    <p class="hint" id="planProgress"></p>
+    <button id="startBtn" style="margin-top:16px">Start Workout</button>
+  </div>
+
+  <button class="secondary" id="loadNewPlanBtn" style="margin-top:8px; display:none">Load a different plan</button>
+</section>
+
+<!-- WORKOUT -->
+<section id="workout" class="screen">
+  <div class="top-row">
+    <button class="secondary" style="width:auto;padding:8px 14px" id="exitWorkout">Exit</button>
+    <span class="hint" id="workoutLabel"></span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="icon-box"><div id="exerciseIcon"></div></div>
+
+  <div class="exercise-name" id="exName">—</div>
+
+  <div class="exercise-meta">
+    <div><div class="num" id="exSets">-</div><div class="label">sets</div></div>
+    <div><div class="num" id="exReps">-</div><div class="label">reps</div></div>
+    <div><div class="num" id="exWeight">-</div><div class="label">weight</div></div>
+  </div>
+  <p class="hint" id="exNotes"></p>
+
+  <button id="nextExBtn" style="margin-top:28px">Next Exercise</button>
+</section>
+
+<!-- WORKOUT DONE -->
+<section id="workoutDone" class="screen">
+  <div class="celebrate">
+    <h2>Nice work. Workout complete.</h2>
+    <p id="workoutDoneSub">Logged and saved.</p>
+    <button id="backHomeBtn">Back to home</button>
+  </div>
+</section>
+
+<!-- WEEK DONE / PHOTO UPLOAD -->
+<section id="weekDone" class="screen">
+  <div class="celebrate">
+    <h2>Week complete. 🔥</h2>
+    <p>Drop a couple progress photos to keep the journal going. Totally optional.</p>
+  </div>
+  <input type="file" id="photoInput" accept="image/*" multiple>
+  <div class="photo-grid" id="photoPreview"></div>
+  <button id="savePhotosBtn">Save & continue</button>
+  <button class="secondary" id="skipPhotosBtn" style="margin-top:10px">Skip for now</button>
+</section>
+
+<!-- STATS -->
+<section id="stats" class="screen">
+  <div class="top-row"><h1>Stats</h1></div>
+  <div id="statsBody"></div>
+</section>
+
+<nav class="tabs">
+  <button data-tab="home" class="active">Home</button>
+  <button data-tab="stats">Stats</button>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>

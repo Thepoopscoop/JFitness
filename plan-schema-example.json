@@ -1,0 +1,47 @@
+{
+  "planName": "12-Week A/B Strength Cycle",
+  "weeks": [
+    {
+      "week": 1,
+      "workouts": [
+        {
+          "day": "A",
+          "exercises": [
+            { "name": "Pull Up", "sets": 3, "reps": "6-8", "weight": "bodyweight", "notes": "" },
+            { "name": "Bench Press", "sets": 4, "reps": "8", "weight": "135", "notes": "" },
+            { "name": "Goblet Squat", "sets": 3, "reps": "10", "weight": "40", "notes": "" }
+          ]
+        },
+        {
+          "day": "B",
+          "exercises": [
+            { "name": "Barbell Row", "sets": 4, "reps": "8", "weight": "95", "notes": "" },
+            { "name": "Overhead Press", "sets": 3, "reps": "8", "weight": "65", "notes": "" },
+            { "name": "Romanian Deadlift", "sets": 3, "reps": "10", "weight": "115", "notes": "" }
+          ]
+        },
+        {
+          "day": "A",
+          "exercises": [
+            { "name": "Pull Up", "sets": 3, "reps": "6-8", "weight": "bodyweight", "notes": "" },
+            { "name": "Bench Press", "sets": 4, "reps": "8", "weight": "137.5", "notes": "" },
+            { "name": "Goblet Squat", "sets": 3, "reps": "10", "weight": "40", "notes": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "workouts": [
+        {
+          "day": "B",
+          "exercises": [
+            { "name": "Barbell Row", "sets": 4, "reps": "8", "weight": "97.5", "notes": "" },
+            { "name": "Overhead Press", "sets": 3, "reps": "8", "weight": "65", "notes": "" },
+            { "name": "Romanian Deadlift", "sets": 3, "reps": "10", "weight": "120", "notes": "" }
+          ]
+        }
+      ]
+    }
+  ]
+}
