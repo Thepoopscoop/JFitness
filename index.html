@@ -15,65 +15,74 @@
 <!-- HOME -->
 <section id="home" class="screen active">
   <div class="top-row">
-    <h1>GRIT</h1>
+    <h1 id="todayDate">GRIT</h1>
   </div>
 
   <div class="stat-strip">
-    <div class="stat"><div class="num" id="streakNum">0</div><div class="label">day streak</div></div>
-    <div class="stat"><div class="num" id="sinceNum">—</div><div class="label">days since last workout</div></div>
+    <div class="stat"><div class="num" id="streakNum">0</div><div class="label">Day streak</div></div>
+    <div class="stat"><div class="num" id="sinceNum">—</div><div class="label">Days since last workout</div></div>
   </div>
 
   <div class="panel" id="noPlanPanel" style="display:none">
     <h2>No plan loaded</h2>
-    <p class="hint">Upload the plan JSON your coach (Claude/ChatGPT) generated for you.</p>
+    <p class="hint">Upload the plan JSON your coach generated for you.</p>
     <input type="file" id="planFile" accept="application/json">
   </div>
 
-  <div class="panel" id="planPanel" style="display:none">
+  <div class="panel elevated" id="planPanel" style="display:none">
+    <div class="eyebrow" style="margin-bottom:8px">Today's Workout</div>
     <h2 id="planTitle">Plan</h2>
     <p class="hint" id="planProgress"></p>
-    <button id="startBtn" style="margin-top:16px">Start Workout</button>
+    <button id="startBtn" style="margin-top:18px">Start Workout</button>
   </div>
 
   <button class="secondary" id="loadNewPlanBtn" style="margin-top:8px; display:none">Load a different plan</button>
+
+  <div class="tagline">STRONGER FOR A WILDER LIFE</div>
 </section>
 
 <!-- WORKOUT -->
 <section id="workout" class="screen">
-  <div class="top-row">
+  <div class="top-row" style="display:flex;justify-content:space-between;align-items:center">
     <button class="secondary" style="width:auto;padding:8px 14px" id="exitWorkout">Exit</button>
-    <span class="hint" id="workoutLabel"></span>
+    <span class="hint" id="workoutLabel" style="margin:0"></span>
   </div>
   <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 
-  <div class="icon-box"><div id="exerciseIcon"></div></div>
-
+  <div class="set-label" id="setLabel">Set 1 of 3</div>
   <div class="exercise-name" id="exName">—</div>
+  <div class="exercise-target" id="exTarget">Target: —</div>
 
-  <div class="exercise-meta">
-    <div><div class="num" id="exSets">-</div><div class="label">sets</div></div>
-    <div><div class="num" id="exReps">-</div><div class="label">reps</div></div>
-    <div><div class="num" id="exWeight">-</div><div class="label">weight</div></div>
+  <div class="rep-counter">
+    <button class="rep-btn" id="repMinus">−</button>
+    <div class="rep-num" id="repNum">0</div>
+    <button class="rep-btn" id="repPlus">+</button>
   </div>
-  <p class="hint" id="exNotes"></p>
+  <div class="weight-row" id="weightRow"></div>
 
-  <button id="nextExBtn" style="margin-top:28px">Next Exercise</button>
+  <button id="logSetBtn" style="margin-top:20px">Log Set</button>
 </section>
 
 <!-- WORKOUT DONE -->
 <section id="workoutDone" class="screen">
   <div class="celebrate">
-    <h2>Nice work. Workout complete.</h2>
-    <p id="workoutDoneSub">Logged and saved.</p>
+    <div class="eyebrow">Workout Complete</div>
+    <h2>Show up. Do the work.</h2>
+    <div class="celebrate-stats">
+      <div><div class="num" id="doneTime">—</div><div class="label">Duration</div></div>
+      <div><div class="num" id="doneExercises">—</div><div class="label">Exercises</div></div>
+      <div><div class="num" id="doneReps">—</div><div class="label">Total reps</div></div>
+    </div>
     <button id="backHomeBtn">Back to home</button>
   </div>
 </section>
 
 <!-- WEEK DONE / PHOTO UPLOAD -->
 <section id="weekDone" class="screen">
-  <div class="celebrate">
-    <h2>Week complete. 🔥</h2>
-    <p>Drop a couple progress photos to keep the journal going. Totally optional.</p>
+  <div class="celebrate" style="padding-bottom:8px">
+    <div class="eyebrow">Week Complete</div>
+    <h2>Stronger than last week.</h2>
+    <p class="hint" style="margin-bottom:20px">Drop a couple progress photos to keep the log going — totally optional.</p>
   </div>
   <input type="file" id="photoInput" accept="image/*" multiple>
   <div class="photo-grid" id="photoPreview"></div>
@@ -83,7 +92,7 @@
 
 <!-- STATS -->
 <section id="stats" class="screen">
-  <div class="top-row"><h1>Stats</h1></div>
+  <div class="top-row"><div class="eyebrow">Progress</div><h1>Stats</h1></div>
   <div id="statsBody"></div>
 </section>
 

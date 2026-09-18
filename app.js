@@ -107,27 +107,32 @@ async function refreshHome() {
   }
 }
 
-// generic stick-figure fallback icon (per-exercise art can be swapped in later)
-const ICON_SVG = `<svg viewBox="0 0 100 100" fill="none" stroke-width="4" stroke-linecap="round">
-  <circle cx="50" cy="18" r="10"/>
-  <line x1="50" y1="28" x2="50" y2="62"/>
-  <line x1="50" y1="38" x2="28" y2="52"/>
-  <line x1="50" y1="38" x2="72" y2="52"/>
-  <line x1="50" y1="62" x2="32" y2="90"/>
-  <line x1="50" y1="62" x2="68" y2="90"/>
-</svg>`;
+// (placeholder icon removed — minimal text-first workout screen)
+
+// parse a leading integer target out of a reps string like "8-12", "10/side", "6"
+function parseTargetReps(repsStr) {
+  const match = String(repsStr).match(/\d+/);
+  return match ? parseInt(match[0], 10) : 8;
+}
+
+let setState = { exIndex: 0, setNum: 1, totalSets: 1, currentReps: 0, loggedSets: [], workoutStart: null };
 
 function showExercise() {
   const ex = currentWorkout.exercises[currentExIndex];
+  setState.exIndex = currentExIndex;
+  setState.setNum = 1;
+  setState.totalSets = ex.sets || 1;
+  setState.currentReps = parseTargetReps(ex.reps);
+  setState.loggedSets = [];
+
   $('exName').textContent = ex.name;
-  $('exSets').textContent = ex.sets ?? '-';
-  $('exReps').textContent = ex.reps ?? '-';
-  $('exWeight').textContent = ex.weight ?? '-';
-  $('exNotes').textContent = ex.notes || '';
-  $('exerciseIcon').innerHTML = ICON_SVG;
+  $('exTarget').textContent = `Target: ${ex.reps} reps${ex.weight && ex.weight !== 'bodyweight' ? ' · ' + ex.weight : ''}`;
+  $('weightRow').textContent = ex.weight && ex.weight !== 'bodyweight' ? ex.weight : 'Bodyweight';
+  $('setLabel').textContent = `Set ${setState.setNum} of ${setState.totalSets}`;
+  $('repNum').textContent = setState.currentReps;
   $('workoutLabel').textContent = `Week ${currentWorkout.week} · ${currentWorkout.day} — ${currentExIndex + 1}/${currentWorkout.exercises.length}`;
-  $('progressFill').style.width = `${((currentExIndex) / currentWorkout.exercises.length) * 100}%`;
-  $('nextExBtn').textContent = currentExIndex === currentWorkout.exercises.length - 1 ? 'Finish Workout' : 'Next Exercise';
+  $('progressFill').style.width = `${(currentExIndex / currentWorkout.exercises.length) * 100}%`;
+  $('logSetBtn').textContent = 'Log Set';
 }
 
 function goTo(screenId) {
@@ -138,26 +143,58 @@ function goTo(screenId) {
 async function startWorkout() {
   currentWorkout = flatWorkouts[currentWorkoutIndex];
   currentExIndex = 0;
+  setState.workoutStart = Date.now();
+  setState.allLoggedExercises = [];
   showExercise();
   goTo('workout');
 }
 
+function logSet() {
+  const ex = currentWorkout.exercises[currentExIndex];
+  setState.loggedSets.push(setState.currentReps);
+
+  if (setState.setNum < setState.totalSets) {
+    setState.setNum++;
+    setState.currentReps = parseTargetReps(ex.reps);
+    $('setLabel').textContent = `Set ${setState.setNum} of ${setState.totalSets}`;
+    $('repNum').textContent = setState.currentReps;
+    return;
+  }
+
+  // exercise done — record it
+  setState.allLoggedExercises.push({ name: ex.name, weight: ex.weight, loggedReps: setState.loggedSets });
+
+  if (currentExIndex < currentWorkout.exercises.length - 1) {
+    currentExIndex++;
+    showExercise();
+  } else {
+    finishWorkout();
+  }
+}
+
 async function finishWorkout() {
+  const totalReps = setState.allLoggedExercises.reduce((sum, e) => sum + e.loggedReps.reduce((a, b) => a + b, 0), 0);
+  const durationSec = Math.round((Date.now() - setState.workoutStart) / 1000);
+
   await addRecord('history', {
     date: new Date().toISOString(),
     week: currentWorkout.week,
     day: currentWorkout.day,
-    exercises: currentWorkout.exercises
+    exercises: setState.allLoggedExercises,
+    durationSec
   });
   const newIndex = currentWorkoutIndex + 1;
   await kvSet('currentWorkoutIndex', newIndex);
   currentWorkoutIndex = newIndex;
 
-  // every 3rd workout (end of week for a 3x/week plan) -> photo prompt
+  const mins = Math.floor(durationSec / 60), secs = durationSec % 60;
+  $('doneTime').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  $('doneExercises').textContent = setState.allLoggedExercises.length;
+  $('doneReps').textContent = totalReps;
+
   if (newIndex % 3 === 0) {
     goTo('weekDone');
   } else {
-    $('workoutDoneSub').textContent = 'Logged and saved.';
     goTo('workoutDone');
   }
 }
@@ -215,14 +252,13 @@ $('loadNewPlanBtn').addEventListener('click', () => {
 
 $('startBtn').addEventListener('click', startWorkout);
 $('exitWorkout').addEventListener('click', () => goTo('home'));
-$('nextExBtn').addEventListener('click', () => {
-  if (currentExIndex < currentWorkout.exercises.length - 1) {
-    currentExIndex++;
-    showExercise();
-  } else {
-    finishWorkout();
-  }
+$('repMinus').addEventListener('click', () => {
+  if (setState.currentReps > 0) { setState.currentReps--; $('repNum').textContent = setState.currentReps; }
 });
+$('repPlus').addEventListener('click', () => {
+  setState.currentReps++; $('repNum').textContent = setState.currentReps;
+});
+$('logSetBtn').addEventListener('click', logSet);
 $('backHomeBtn').addEventListener('click', async () => { await refreshHome(); goTo('home'); });
 
 let pendingPhotos = [];
